@@ -1,0 +1,32 @@
+#!/bin/bash
+
+if [[ $1 ]]; then
+    export TARGET_DIR=$1
+    # echo $TARGET_DIR 1>&2
+
+    # save intermediate results in a text file because one might want to do additional filtering on it later
+    hsi -P ls -PR $TARGET_DIR                                           |
+        awk  'BEGIN { FS = "\t"};{ if($1 == "FILE") print $6, $2}'      |
+        sort                                                            |
+        awk '{print "cget", $2}'                                        |
+        grep -v '.tar.idx' > tape_list
+
+    if [[ $2 ]]; then
+        sed -i -e"s/cget /cget $2/g" tape_list
+    fi
+else
+    echo 'USAGE: list_tapes <hpss_directory_path> [preprendpath]'
+    echo '  hpss_directory_path = a glob-able path for hpss files to be listed'
+    echo 'EXAMPLES:'
+    echo '  list_tapes /CHLIU/HW_2010/4KM_1OCT06-1OCT07/'
+    echo "  list_tapes '/KYOKO/wrf/snowpack/HW2010/CTRL/hydro_study/NARR_WRFOUT_T2_04km*.gz'"
+fi
+
+
+# /KYOKO/CESM_LE/wrf361_noah/Ens030_v0/wrfout/*
+#
+# if for some reason you need to use kerberos tickets to access hpss:
+#
+# export ticketname=`klist | head -1 | sed -e"s/:/ /g" | awk '{print $4 }'`
+# echo $ticketname 1>&2
+# hsi -P -c $ticketname  ls -PR $TARGET_DIR |  awk  'BEGIN { FS = "\t"};{ if($1 == "FILE") print $6, $2}' | sort | awk '{print "cget", $2}'

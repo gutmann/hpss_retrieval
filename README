@@ -1,0 +1,26 @@
+Setup to download a large number of files from HPSS do some processing on them before deleting.
+
+This script relies on the various shell and python scripts in this directory being where they are, if you want to do something different with the downloaded file you may want to start editing thin_data.sh, that is the script that starts all the processing.
+
+Note that when expand_and_thin_file finishes is runs
+    rm inputfilename
+    touch subset/inputfilename
+where inputfilename is the file that was being processed, and remove_files_from_hpss_list looks for files in subset/ to figure out what has been processed already.  Without some mechanism like this the setup won't work, though it should have been cleaned up to make this easier to work for more generic workflows.
+
+First, run (e.g.)
+    list_tapes data/\*.tar
+to get a file that can be input to hsi (i.e. hsi < tape_list will work)
+
+Then, in running_dir, submit batch_submit.sh
+
+---------------------------------
+Full example
+---------------------------------
+mkdir -p running_dir
+cp batch_submit.sh running_dir/
+
+list_tapes data/\*.tar
+mv tape_list running_dir/master_tape_file
+
+cd running_dir
+bsub < batch_submit.sh
