@@ -13,14 +13,16 @@ to get a file that can be input to hsi (i.e. hsi < tape_list will work)
 
 Then, in running_dir, submit batch_submit.sh
 
+An example "setup_all" script is provided, this script sets up 5 models to download in parallel
+
 ---------------------------------
 Full example
 ---------------------------------
 mkdir -p running_dir
 cp batch_submit.sh running_dir/
 
-list_tapes data/\*.tar
-mv tape_list running_dir/master_tape_file
+list_tapes data/\*.tar data
+mv tape_list running_dir/master_tape_list
 
 cd running_dir
 bsub < batch_submit.sh

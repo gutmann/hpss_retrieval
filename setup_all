@@ -1,0 +1,15 @@
+#!/bin/bash
+
+for m in cnrm giss mri miroc5 noresm; do
+    echo $m
+    ./list_tapes /home/trude/CONUS_hydro/icarfiles/icar_2d_${m}_\*_dom\*/icar_\*.tar /home/trude/CONUS_hydro/icarfiles/icar_2d_${m}_\*_dom\*/
+    mkdir -p ${m}
+    mv tape_list ${m}/master_tape_list
+
+    cp batch_submit.sh ${m}/
+
+    cd ${m}
+    sed -i -e"s/-J dl/-J ${m}/" batch_submit.sh
+    bsub < batch_submit.sh
+    cd ../
+done
