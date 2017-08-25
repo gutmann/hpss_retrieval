@@ -12,7 +12,7 @@ if [[ $1 ]]; then
         grep -v '.tar.idx' > tape_list
 
     if [[ $2 ]]; then
-        sed -i -e"s/cget /cget $2/g" tape_list
+        sed -i -e"s|cget |cget $2|g" tape_list
     fi
 else
     echo 'USAGE: list_tapes <hpss_directory_path> [preprendpath]'
