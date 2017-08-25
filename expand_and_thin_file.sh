@@ -29,7 +29,7 @@ if [[ $1 ]]; then
 
 # incase the job was killed mid-stream
 # the main work process could be killed
-# but this script could to continue just a second longer
-    sleep 10
+# but this script could to continue just a few seconds longer
+    sleep 30
     touch subset/$1
 fi
