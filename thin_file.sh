@@ -1,7 +1,9 @@
 #!/bin/sh
 
+if [[ ! `which ncks 2>/dev/null` ]]; then module load nco; fi
+
 if [[ -e $1 ]]; then
-    ncks  -4 -L 2 -v time,lat,lon,crain $1 short_$1
+    ncks -v time,lat,lon,crain,u10m,v10m $1 short_$1
 
     if [[ -e short_$1 ]]; then
         mkdir -p subset
